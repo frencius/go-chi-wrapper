@@ -8,4 +8,5 @@ require (
 	github.com/golang/mock v1.5.0 // indirect
 	github.com/stretchr/testify v1.7.0
 	github.com/swaggo/http-swagger v1.0.0
+	github.com/swaggo/swag v1.7.0 // indirect
 )
