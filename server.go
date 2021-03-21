@@ -84,6 +84,19 @@ func (h *Server) Close(server *http.Server) error {
 	return nil
 }
 
+func (h *Server) Route(pattern string, fn func(r IServer)) {
+	subRouter := New(h.ctx)
+	if fn != nil {
+		fn(subRouter)
+	}
+
+	h.router.Mount(pattern, subRouter)
+}
+
+func (h *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	h.router.ServeHTTP(w, r)
+}
+
 // Get adds the route `pattern` that matches a GET http method to
 // execute the `handlerFn` http.HandlerFunc.
 func (h *Server) Get(pattern string, f http.HandlerFunc) {
