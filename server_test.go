@@ -3,7 +3,9 @@ package server
 import (
 	"context"
 	"fmt"
+	"net/http"
 	net_http "net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -98,6 +100,24 @@ func TestMethods(t *testing.T) {
 		mockServer.Put(mockPattern, mockHandlerFunc)
 		mockServer.Trace(mockPattern, mockHandlerFunc)
 	})
+
+	t.Run("test ServeHTTP", func(t *testing.T) {
+		mockRouter := New(context.Background())
+
+		req, err := http.NewRequest("GET", "/ping", nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		rr := httptest.NewRecorder()
+
+		mockRouter.ServeHTTP(rr, req)
+	})
+
+	t.Run("test Route", func(t *testing.T) {
+		mockRouter := New(context.Background())
+		mockRouter.Route("/mockPattern", func(r IServer) { r.Post("/", func(w http.ResponseWriter, r *http.Request) {}) })
+	})
+
 }
 
 func TestMiddlewares(t *testing.T) {

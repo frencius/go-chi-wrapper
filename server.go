@@ -84,6 +84,7 @@ func (h *Server) Close(server *http.Server) error {
 	return nil
 }
 
+// Route is used to create subroute
 func (h *Server) Route(pattern string, fn func(r IServer)) {
 	subRouter := New(h.ctx)
 	if fn != nil {
@@ -93,6 +94,8 @@ func (h *Server) Route(pattern string, fn func(r IServer)) {
 	h.router.Mount(pattern, subRouter)
 }
 
+// ServeHTTP has same definition with (mx *Mux) ServeHTTP()
+// see ServeHTTP in chi library
 func (h *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h.router.ServeHTTP(w, r)
 }
